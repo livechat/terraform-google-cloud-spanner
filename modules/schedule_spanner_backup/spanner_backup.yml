@@ -28,7 +28,7 @@ main:
                 call: create_backup
                 args:
                     parent: ${eachValue.parent}
-                    backupId: ${eachValue.backupId+"-"+text.substring(time.format(sys.now()), 2, 10)}
+                    backupId: ${eachValue.backupId+"-"+ text.replace_all(text.substring(time.format(sys.now()), 2, 10), "-","")}
                     database: ${eachValue.database}
                     expireTime: ${time.format(sys.now() + eachValue.expireTime)}
                 result: backup_result
