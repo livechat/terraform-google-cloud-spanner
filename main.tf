@@ -50,6 +50,7 @@ resource "google_spanner_instance" "instance_num_node" {
   config       = var.instance_config
   display_name = var.instance_display_name
   name         = var.instance_name
+  edition      = var.edition 
   num_nodes    = var.instance_size.num_nodes
   labels       = var.instance_labels
 }
@@ -60,6 +61,7 @@ resource "google_spanner_instance" "instance_processing_units" {
   config           = var.instance_config
   display_name     = var.instance_display_name
   name             = var.instance_name
+  edition          = var.edition  
   processing_units = var.instance_size.processing_units
   labels           = var.instance_labels
 }

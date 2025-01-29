@@ -15,18 +15,17 @@
  */
 
 module "service_account_scheduler" {
-  source     = "terraform-google-modules/service-accounts/google"
-  version    = "~> 4.1.1"
-  project_id = var.project_id
-  prefix     = "spanner-backup-scheduler"
-  names      = ["1"]
-
+  source        = "terraform-google-modules/service-accounts/google"
+  version       = "~> 4.4.0"
+  project_id    = var.project_id
+  prefix        = "spanner-backup-scheduler"
+  names         = ["1"]
   project_roles = ["${var.project_id}=>roles/workflows.invoker"]
 }
 
 module "service_account_workflow" {
   source        = "terraform-google-modules/service-accounts/google"
-  version       = "~> 4.1.1"
+  version       = "~> 4.4.0"
   project_id    = var.project_id
   prefix        = "spanner-backup-workflow"
   names         = ["1"]
@@ -34,7 +33,7 @@ module "service_account_workflow" {
 }
 
 module "workflow" {
-  source                 = "github.com/GoogleCloudPlatform/terraform-google-cloud-workflows?ref=v0.1.1"
+  source                 = "github.com/livechat/terraform-google-cloud-workflows"
   project_id             = var.project_id
   workflow_name          = "spanner-backup-workflow"
   region                 = var.backup_schedule_region

@@ -52,6 +52,16 @@ variable "instance_size" {
   }
 }
 
+variable "edition" {
+  description = "The edition selected for this instance. Different editions provide different capabilities at different price points."
+  type        = string
+  default     = "STANDARD"
+  validation {
+    condition     = can(regex("^(EDITION_UNSPECIFIED|STANDARD|ENTERPRISE|ENTERPRISE_PLUS)$", var.edition))
+    error_message = "The edition must be one of the following: STANDARD, ENTERPRISE, ENTERPRISE_PLUS or EDITION_UNSPECIFIED"
+  }
+}
+
 variable "create_instance" {
   description = "Switch to use create OR use existing Spanner Instance "
   type        = bool
