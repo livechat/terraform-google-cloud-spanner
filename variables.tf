@@ -41,14 +41,7 @@ variable "instance_size" {
     num_nodes        = optional(number)
     processing_units = optional(number)
   })
-  validation {
-    condition = !(
-      try(var.instance_size.num_nodes, null) == null
-      &&
-      try(var.instance_size.processing_units, null) == null
-    )
-    error_message = "Either num_nodes OR processing_units information is supported."
-  }
+  default = null
 }
 
 variable "create_instance" {
@@ -59,6 +52,12 @@ variable "create_instance" {
 
 variable "enable_autoscaling" {
   description = "Enable autoscaling for the Spanner Instance"
+  type        = bool
+  default     = false
+}
+
+variable "enable_asymmetric_autoscaling" {
+  description = "Enable asymmetric autoscaling for the Spanner Instance"
   type        = bool
   default     = false
 }
