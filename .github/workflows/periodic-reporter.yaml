@@ -23,6 +23,8 @@ on:
     - cron: '0 5,17 * * *'
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   report:
     if: github.repository_owner == 'GoogleCloudPlatform' || github.repository_owner == 'terraform-google-modules'
