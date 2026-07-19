@@ -50,30 +50,31 @@ resource "google_spanner_instance" "instance_num_node" {
   config       = var.instance_config
   display_name = var.instance_display_name
   name         = var.instance_name
-  num_nodes    = var.instance_size.num_nodes
+  num_nodes    = var.enable_autoscaling ? null : var.instance_size.num_nodes
   labels       = var.instance_labels
 
   dynamic "autoscaling_config" {
     for_each = var.enable_autoscaling ? [1] : []
     content {
       autoscaling_limits {
-        min_processing_units = var.min_processing_units
-        max_processing_units = var.max_processing_units
-        min_nodes            = var.min_nodes
-        max_nodes            = var.max_nodes
+        min_nodes = var.min_nodes
+        max_nodes = var.max_nodes
       }
       autoscaling_targets {
         high_priority_cpu_utilization_percent = var.high_priority_cpu_utilization_percent
         storage_utilization_percent           = var.storage_utilization_percent
       }
-      asymmetric_autoscaling_options {
-        replica_selection {
-          location = var.replica_location
-        }
-        overrides {
-          autoscaling_limits {
-            min_nodes = var.override_min_nodes
-            max_nodes = var.override_max_nodes
+      dynamic "asymmetric_autoscaling_options" {
+        for_each = var.enable_asymmetric_autoscaling ? [1] : []
+        content {
+          replica_selection {
+            location = var.replica_location
+          }
+          overrides {
+            autoscaling_limits {
+              min_nodes = var.override_min_nodes
+              max_nodes = var.override_max_nodes
+            }
           }
         }
       }
@@ -93,6 +94,8 @@ resource "google_spanner_instance" "instance_processing_units" {
   name             = var.instance_name
   processing_units = var.instance_size.processing_units
   labels           = var.instance_labels
+  edition          = var.edition
+  force_destroy    = var.force_destroy
 }
 
 data "google_spanner_instance" "instance" {
